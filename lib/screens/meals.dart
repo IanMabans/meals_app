@@ -7,18 +7,25 @@ import '../models/meal.dart';
 class MealsScreen extends StatelessWidget {
   const MealsScreen({
     Key? key,
-    required this.title,
     required this.meals,
     required this.onSelectMeal,
+    this.title,
+    required this.onToggleFavorite,
   }) : super(key: key);
 
-  final String title;
+  final String? title;
   final List<Meal> meals;
   final void Function(Meal) onSelectMeal;
+  final void Function(Meal meal) onToggleFavorite;
 
   void selectMeal(BuildContext context, Meal meal) {
     Navigator.of(context).push(
-      MaterialPageRoute(builder: (context) => MealDetailsScreen(meal: meal),),
+      MaterialPageRoute(
+        builder: (context) => MealDetailsScreen(
+          meal: meal,
+          onToggleFavorite: onToggleFavorite,
+        ),
+      ),
     );
   }
 
@@ -26,9 +33,12 @@ class MealsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     Widget content = ListView.builder(
       itemCount: meals.length,
-      itemBuilder: (ctx, index) => MealItem(meal: meals[index], onSelectMeal: ( meal) {
-        selectMeal(context, meal);
-      },),
+      itemBuilder: (ctx, index) => MealItem(
+        meal: meals[index],
+        onSelectMeal: (meal) {
+          selectMeal(context, meal);
+        },
+      ),
     );
 
     if (meals.isEmpty) {
@@ -39,8 +49,8 @@ class MealsScreen extends StatelessWidget {
             Text(
               'Uh....oh..Nothing left',
               style: Theme.of(context).textTheme.headlineLarge!.copyWith(
-                color: Theme.of(context).colorScheme.onBackground,
-              ),
+                    color: Theme.of(context).colorScheme.onBackground,
+                  ),
             ),
             const SizedBox(
               height: 16,
@@ -48,17 +58,20 @@ class MealsScreen extends StatelessWidget {
             Text(
               'Try and select a different category',
               style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                color: Theme.of(context).colorScheme.onBackground,
-              ),
+                    color: Theme.of(context).colorScheme.onBackground,
+                  ),
             ),
           ],
         ),
       );
     }
+    if (title == null) {
+      return content;
+    }
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(title),
+        title: Text(title!),
       ),
       body: content,
     );
