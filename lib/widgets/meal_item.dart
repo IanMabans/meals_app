@@ -1,18 +1,27 @@
 import 'package:flutter/material.dart';
-import 'package:meals/widgets/meal_item_trait.dart';
 import 'package:transparent_image/transparent_image.dart';
 
 import '../models/meal.dart';
+import 'meal_item_trait.dart';
 
 class MealItem extends StatelessWidget {
-  const MealItem({Key? key, required this.meal}) : super(key: key);
+  const MealItem({
+    Key? key,
+    required this.meal,
+    required this.onSelectMeal,
+  }) : super(key: key);
 
   final Meal meal;
-  String get complexityText{
-    return meal.complexity.name[0].toUpperCase() + meal.complexity.name.substring(1);
+  final void Function(Meal meal) onSelectMeal;
+
+  String get complexityText {
+    return meal.complexity.name[0].toUpperCase() +
+        meal.complexity.name.substring(1);
   }
-  String get affordabilityText{
-    return meal.affordability.name[0].toUpperCase() + meal.affordability.name.substring(1);
+
+  String get affordabilityText {
+    return meal.affordability.name[0].toUpperCase() +
+        meal.affordability.name.substring(1);
   }
 
   @override
@@ -25,7 +34,10 @@ class MealItem extends StatelessWidget {
       clipBehavior: Clip.hardEdge,
       elevation: 2,
       child: InkWell(
-        onTap: () {},
+        onTap: () {
+          onSelectMeal(meal);
+        },
+
         child: Stack(
           children: [
             FadeInImage(
@@ -41,8 +53,10 @@ class MealItem extends StatelessWidget {
               right: 0,
               child: Container(
                 color: Colors.black54,
-                padding:
-                    const EdgeInsets.symmetric(vertical: 6, horizontal: 44),
+                padding: const EdgeInsets.symmetric(
+                  vertical: 6,
+                  horizontal: 44,
+                ),
                 child: Column(
                   children: [
                     Text(
@@ -67,12 +81,16 @@ class MealItem extends StatelessWidget {
                           label: '${meal.duration} min',
                           icon: Icons.schedule_outlined,
                         ),
-                        const SizedBox(width: 12,),
+                        const SizedBox(
+                          width: 12,
+                        ),
                         MealItemTrait(
                           label: complexityText,
                           icon: Icons.work_outlined,
                         ),
-                        const SizedBox(width: 12,),
+                        const SizedBox(
+                          width: 12,
+                        ),
                         MealItemTrait(
                           label: affordabilityText,
                           icon: Icons.attach_money_outlined,

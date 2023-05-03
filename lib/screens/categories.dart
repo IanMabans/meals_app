@@ -9,15 +9,20 @@ class CategoriesScreen extends StatelessWidget {
   const CategoriesScreen({Key? key}) : super(key: key);
 
   void _selectCategory(BuildContext context, Category category) {
-    final filteredMeals =dummyMeals.where((meal) => meal.categories.contains(category.id)).toList();
+    final filteredMeals = dummyMeals
+        .where((meal) => meal.categories.contains(category.id))
+        .toList();
 
     Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) =>
-              MealsScreen(title: category.title, meals:filteredMeals,
-              ),
-        ));
+      context,
+      MaterialPageRoute(
+        builder: (context) => MealsScreen(
+          title: category.title,
+          meals: filteredMeals,
+          onSelectMeal: (meal) {},
+        ),
+      ),
+    );
   }
 
   @override
